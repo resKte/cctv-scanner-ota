@@ -1,0 +1,104 @@
+#include <WiFi.h>
+
+// Credenciales de tu red Wi-Fi local
+const char* ssid = "TU_RED_WIFI";
+const char* password = "TU_CONTRASEÑA_WIFI";
+
+// Puertos web comunes a revisar
+const int puertosWeb[] = {80, 443, 8080, 8443};
+const int numPuertos = 4;
+
+// Tiempo máximo de espera por puerto (en milisegundos)
+const int timeoutMs = 300;
+
+void setup() {
+  Serial.begin(115200);
+  delay(1000);
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+
+  Serial.print("Conectando a Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nConectado.");
+
+  IPAddress ipLocal = WiFi.localIP();
+  Serial.print("IP del ESP32-S3: ");
+  Serial.println(ipLocal);
+
+  // Encabezado del formato CSV
+  Serial.println("\n--- INICIO REPORTE CSV ---");
+  Serial.println("IP,Puerto,Estado,Latencia_ms,Servidor_HTML");
+
+  escanearSubred(ipLocal);
+
+  Serial.println("--- FIN REPORTE CSV ---");
+}
+
+void loop() {
+  // El escaneo se ejecuta una sola vez al iniciar
+}
+
+void escanearSubred(IPAddress ipBase) {
+  // Recorre del host .1 al .254 en la misma subred (/24)
+  for (int host = 1; host <= 254; host++) {
+    // Evitar escanear la propia IP del ESP32-S3
+    if (host == ipBase[3]) continue;
+
+    IPAddress ipObjetivo(ipBase[0], ipBase[1], ipBase[2], host);
+
+    for (int i = 0; i < numPuertos; i++) {
+      int puerto = puertosWeb[i];
+      verificarServidorWeb(ipObjetivo, puerto);
+    }
+  }
+}
+
+void verificarServidorWeb(IPAddress ip, int puerto) {
+  WiFiClient client;
+  unsigned long inicio = millis();
+
+  // Intentar conexión TCP al puerto
+  if (client.connect(ip, puerto, timeoutMs)) {
+    unsigned long latencia = millis() - inicio;
+    String infoServidor = "Puerto abierto (Sin cabecera HTTP)";
+
+    // Si es puerto HTTP estándar (80 o 8080), consultar cabecera
+    if (puerto == 80 || puerto == 8080) {
+      client.print("HEAD / HTTP/1.0\r\nHost: ");
+      client.print(ip);
+      client.print("\r\nConnection: close\r\n\r\n");
+
+      unsigned long esperaRespuesta = millis();
+      while (client.connected() && !client.available() && (millis() - esperaRespuesta < 500)) {
+        delay(10);
+      }
+
+      if (client.available()) {
+        String primeraLinea = client.readStringUntil('\n');
+        primeraLinea.trim();
+        if (primeraLinea.startsWith("HTTP/")) {
+          infoServidor = primeraLinea; // Ejemplo: HTTP/1.1 200 OK
+        }
+      }
+    } else {
+      infoServidor = "HTTPS / SSL Detectado";
+    }
+
+    client.stop();
+
+    // Imprimir fila en formato CSV
+    Serial.print(ip);
+    Serial.print(",");
+    Serial.print(puerto);
+    Serial.print(",Abierto,");
+    Serial.print(latencia);
+    Serial.print(",\"");
+    Serial.print(infoServidor);
+    Serial.println("\"");
+  }
+}
+Pega aquí tu código. Este archivo todavía no se compila con el firmware.

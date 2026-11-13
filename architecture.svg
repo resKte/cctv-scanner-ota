@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="960" viewBox="0 0 1280 960" role="img" aria-labelledby="title description">
+  <title id="title">Arquitectura de ESP32 Site Survey</title>
+  <desc id="description">Portal local con Wi-Fi AP y STA, escaneo pasivo, medición de transferencia, pantalla TFT y persistencia en NVS y LittleFS.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#526581"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; fill: #17243b; }
+      .title { font-size: 30px; font-weight: 700; }
+      .subtitle { font-size: 15px; fill: #526581; }
+      .section { font-size: 19px; font-weight: 700; }
+      .heading { font-size: 16px; font-weight: 700; }
+      .body { font-size: 14px; }
+      .small { font-size: 12px; fill: #526581; }
+      .box { fill: #fff; stroke: #b7c5d8; stroke-width: 1.5; rx: 12; }
+      .config { fill: #edf4ff; stroke: #7aa2df; stroke-width: 1.5; rx: 12; }
+      .firmware { fill: #e9f8f2; stroke: #63ad8e; stroke-width: 1.5; rx: 12; }
+      .hardware { fill: #fff5e8; stroke: #dda85e; stroke-width: 1.5; rx: 12; }
+      .line { fill: none; stroke: #526581; stroke-width: 2; marker-end: url(#arrow); }
+      .dashed { fill: none; stroke: #8b99ad; stroke-width: 1.5; stroke-dasharray: 6 5; }
+    </style>
+  </defs>
+  <rect width="1280" height="960" fill="#f7f9fc"/>
+  <text x="48" y="58" class="title">ESP32 Site Survey · arquitectura del sistema</text>
+  <text x="48" y="86" class="subtitle">Waveshare ESP32-S3-LCD-1.47B · SKU 31501 · firmware Arduino</text>
+
+  <rect x="48" y="116" width="1184" height="122" class="config"/>
+  <text x="72" y="148" class="section">Configuración · PlatformIO</text>
+  <rect x="72" y="166" width="250" height="52" class="box"/>
+  <text x="90" y="188" class="heading">Placa</text>
+  <text x="90" y="207" class="body">Waveshare 1.47B · 16 MB Flash</text>
+  <rect x="342" y="166" width="250" height="52" class="box"/>
+  <text x="360" y="188" class="heading">Pantalla</text>
+  <text x="360" y="207" class="body">Arduino_GFX · ST7789 · 172 × 320</text>
+  <rect x="612" y="166" width="250" height="52" class="box"/>
+  <text x="630" y="188" class="heading">Portal y red</text>
+  <text x="630" y="207" class="body">WiFi · WebServer · Preferences/NVS</text>
+  <rect x="882" y="166" width="326" height="52" class="box"/>
+  <text x="900" y="188" class="heading">Persistencia de mediciones</text>
+  <text x="900" y="207" class="body">LittleFS · archivo CSV descargable</text>
+
+  <rect x="48" y="266" width="800" height="590" class="firmware"/>
+  <text x="72" y="300" class="section">ESP32-S3 · aplicación principal</text>
+
+  <rect x="72" y="324" width="350" height="126" class="box"/>
+  <text x="94" y="354" class="heading">Wi-Fi en modo AP + STA</text>
+  <text x="94" y="380" class="body">AP local: ESP32-SiteSurvey</text>
+  <text x="94" y="402" class="body">Portal: 192.168.4.1</text>
+  <text x="94" y="426" class="small">STA conecta a redes autorizadas</text>
+
+  <rect x="448" y="324" width="376" height="126" class="box"/>
+  <text x="470" y="354" class="heading">WebServer · sesión autenticada</text>
+  <text x="470" y="380" class="body">Panel HTML/CSS/JS sin CDN</text>
+  <text x="470" y="402" class="body">Estado · escaneo · test · CSV</text>
+  <text x="470" y="426" class="small">Cookie de sesión HttpOnly / SameSite</text>
+
+  <rect x="72" y="474" width="350" height="140" class="box"/>
+  <text x="94" y="504" class="heading">Escaneo pasivo 2.4 GHz</text>
+  <text x="94" y="530" class="body">SSID · BSSID · canal · RSSI</text>
+  <text x="94" y="552" class="body">Evaluación de cifrado + canal sugerido</text>
+  <text x="94" y="584" class="small">Solapamiento estimado; escucha pasiva</text>
+
+  <rect x="448" y="474" width="376" height="140" class="box"/>
+  <text x="470" y="504" class="heading">Medición de transmisión</text>
+  <text x="470" y="530" class="body">Bloques ESP32 → navegador</text>
+  <text x="470" y="552" class="body">Navegador calcula Mbps y latencia</text>
+  <text x="470" y="580" class="small">ESP32 calcula score y detecta cambios</text>
+  <text x="470" y="600" class="small">Heurística local; no es una red neuronal</text>
+
+  <rect x="72" y="638" width="350" height="134" class="box"/>
+  <text x="94" y="668" class="heading">Preferences / NVS</text>
+  <text x="94" y="694" class="body">Lista blanca de hasta 5 redes</text>
+  <text x="94" y="716" class="body">Credenciales para reconexión STA</text>
+  <text x="94" y="746" class="small">Claves locales; NVS sin cifrado de flash</text>
+
+  <rect x="448" y="638" width="376" height="134" class="box"/>
+  <text x="470" y="668" class="heading">LittleFS</text>
+  <text x="470" y="694" class="body">Puntos de medición persistentes</text>
+  <text x="470" y="716" class="body">points.csv · tabla web / descarga</text>
+  <text x="470" y="746" class="small">Montaje del sistema de archivos local</text>
+
+  <rect x="72" y="796" width="752" height="42" class="hardware"/>
+  <text x="94" y="822" class="body">LCD ST7789 · SPI: MOSI 45 / SCLK 40 / CS 42 / DC 41 / RST 39 · BL 46</text>
+
+  <rect x="890" y="302" width="342" height="230" class="hardware"/>
+  <text x="914" y="338" class="section">Teléfono / navegador</text>
+  <text x="914" y="374" class="body">1. Conectarse al AP del ESP32</text>
+  <text x="914" y="402" class="body">2. Abrir http://192.168.4.1</text>
+  <text x="914" y="430" class="body">3. Iniciar sesión en el portal</text>
+  <text x="914" y="458" class="body">4. Escanear, medir y registrar</text>
+  <text x="914" y="496" class="small">Canvas HTML5 para el gráfico de canales</text>
+
+  <rect x="890" y="602" width="342" height="190" class="hardware"/>
+  <text x="914" y="638" class="section">Router / red Wi-Fi STA</text>
+  <text x="914" y="676" class="body">Red elegida por el usuario</text>
+  <text x="914" y="704" class="body">Conexión y reconexión desde NVS</text>
+  <text x="914" y="732" class="body">Estado, canal y RSSI reportados</text>
+  <text x="914" y="766" class="small">El ESP32-S3 opera en 2.4 GHz</text>
+
+  <path d="M848 390 H882" class="line"/>
+  <text x="850" y="378" class="small">HTTP local</text>
+  <path d="M848 700 H882" class="line"/>
+  <text x="850" y="688" class="small">STA</text>
+  <path d="M248 450 V466" class="dashed"/>
+  <path d="M614 450 V466" class="dashed"/>
+  <text x="48" y="900" class="small">Seguridad: solo redes propias/autorizadas. El análisis actual es heurístico; ESP32-S3 acelera modelos pequeños con ESP-NN, pero no tiene NPU dedicado.</text>
+  <text x="48" y="922" class="small">Cambia las credenciales de ejemplo antes de desplegar; el portal HTTP es local y no cifra el tráfico.</text>
+</svg>
