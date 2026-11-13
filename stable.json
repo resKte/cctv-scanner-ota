@@ -1,6 +1,1 @@
-{
-  "version": "v0.5.0",
-  "url": "https://github.com/resKte/cctv-scanner-ota/releases/download/v0.5.0/firmware.bin",
-  "sha256": "205c862f5c90fe84628c37f16a4c85a001b4ae4d957e171e7f8a8657894b00bf",
-  "size": 3149984
-}
+{"version": "v0.5.1", "url": "https://github.com/resKte/cctv-scanner-ota/releases/download/v0.5.1/firmware.bin", "sha256": "b8ac2331317d86379e11034cdbb8bf8be49c8ba334fa529bcd2bf46501168131", "size": 3153008}
